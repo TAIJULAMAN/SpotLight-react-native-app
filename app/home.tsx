@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BarChart2, Check } from 'lucide-react-native';
+import { BarChart2 } from 'lucide-react-native';
 import { Colors, Spacing } from '../constants/Theme';
 import { CHARACTERS } from '../constants/MockData';
+import CharacterCard from '../components/CharacterCard';
 import { useRouter } from 'expo-router';
 import Head from 'expo-router/head';
 import { useVoteStatus, MAX_VOTES } from '../utils/voteStorage';
@@ -26,42 +27,6 @@ export default function HomeScreen() {
                 params: { id: selectedId }
             });
         }
-    };
-
-    const renderCharacter = ({ item }: { item: typeof CHARACTERS[0] }) => {
-        const isSelected = selectedId === item.id;
-        const isVoted = votedIds.includes(item.id);
-        return (
-            <TouchableOpacity
-                style={[
-                    styles.charCard,
-                    isSelected && styles.selectedCharCard,
-                    isVoted && styles.votedCharCard,
-                ]}
-                onPress={() => {
-                    setSelectedId(item.id);
-                    router.push({
-                        pathname: '/watch',
-                        params: { id: item.id }
-                    });
-                }}
-                activeOpacity={0.8}
-            >
-                {/* Checkmark in card top-right */}
-                {isVoted && (
-                    <View style={styles.cardVotedBadge}>
-                        <Check color="#9CA3AF" size={12} />
-                    </View>
-                )}
-                <View style={styles.charImageContainer}>
-                    <Image source={item.image} style={styles.charImage} />
-                </View>
-                <Text style={[styles.charName, isSelected && styles.selectedCharName, isVoted && styles.votedCharName]}>
-                    {item.name}
-                </Text>
-                {isVoted && <Text style={styles.votedTag}>Voted</Text>}
-            </TouchableOpacity>
-        );
     };
 
     const isSelectedVoted = selectedId ? votedIds.includes(selectedId) : false;
@@ -94,9 +59,20 @@ export default function HomeScreen() {
                 {/* Characters */}
                 <View style={styles.gridContainer}>
                     {CHARACTERS.map((char) => (
-                        <View key={char.id} style={styles.gridItem}>
-                            {renderCharacter({ item: char })}
-                        </View>
+                        <CharacterCard
+                            key={char.id}
+                            name={char.name}
+                            image={char.image}
+                            isSelected={selectedId === char.id}
+                            isVoted={votedIds.includes(char.id)}
+                            onPress={() => {
+                                setSelectedId(char.id);
+                                router.push({
+                                    pathname: '/watch',
+                                    params: { id: char.id }
+                                });
+                            }}
+                        />
                     ))}
                 </View>
             </ScrollView>
@@ -107,6 +83,7 @@ export default function HomeScreen() {
                     style={[styles.voteButton, isVoteDisabled && styles.disabledVoteButton]}
                     onPress={handleVote}
                     disabled={isVoteDisabled}
+                    activeOpacity={0.85}
                 >
                     <Text style={[styles.voteButtonText, isVoteDisabled && styles.disabledVoteButtonText]}>
                         {isSelectedVoted
@@ -120,6 +97,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                     style={styles.resultsLink}
                     onPress={() => router.push('/results')}
+                    activeOpacity={0.7}
                 >
                     <BarChart2 color={Colors.primary} size={20} />
                     <Text style={styles.resultsLinkText}>View Live Results</Text>
@@ -148,7 +126,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
+        borderColor: 'rgba(255, 255, 255, 0.08)',
     },
     headerText: {
         marginLeft: Spacing.md,
@@ -167,68 +145,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         paddingHorizontal: Spacing.md,
         justifyContent: 'space-between',
-    },
-    gridItem: {
-        width: '48%',
-        marginBottom: Spacing.md,
-    },
-    charCard: {
-        backgroundColor: 'rgba(255,255,255,0.05)',
-        borderRadius: 40,
-        padding: Spacing.md,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.05)',
-        position: 'relative',
-    },
-    selectedCharCard: {
-        backgroundColor: 'rgba(168, 85, 247, 0.15)',
-    },
-    votedCharCard: {
-        opacity: 0.65,
-    },
-    cardVotedBadge: {
-        position: 'absolute',
-        top: 14,
-        right: 14,
-        width: 22,
-        height: 22,
-        borderRadius: 11,
-        backgroundColor: '#374151',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.15)',
-        zIndex: 2,
-    },
-    charImageContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        overflow: 'hidden',
-        marginBottom: Spacing.sm,
-    },
-    charImage: {
-        width: '100%',
-        height: '100%',
-    },
-    charName: {
-        color: Colors.textSecondary,
-        fontSize: 14,
-        textAlign: 'center',
-    },
-    selectedCharName: {
-        color: '#FFF',
-        fontWeight: 'bold',
-    },
-    votedCharName: {
-        color: '#9CA3AF',
-    },
-    votedTag: {
-        color: '#9CA3AF',
-        fontSize: 11,
-        fontWeight: '600',
-        marginTop: 2,
     },
     footer: {
         position: 'absolute',

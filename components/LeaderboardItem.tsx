@@ -18,10 +18,23 @@ export default function LeaderboardItem({
   const isTop = rank === 1;
   const imageSource = typeof image === "string" ? { uri: image } : image;
 
+  const getRankColor = () => {
+    switch (rank) {
+      case 1:
+        return "#FBBF24"; // Gold
+      case 2:
+        return "#E2E8F0"; // Silver
+      case 3:
+        return "#FB923C"; // Bronze
+      default:
+        return "rgba(255, 255, 255, 0.4)";
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isTop && styles.topContainer]}>
       <View style={styles.rankContainer}>
-        <Text style={styles.rank}>{rank}</Text>
+        <Text style={[styles.rank, { color: getRankColor() }]}>{rank}</Text>
       </View>
       <View style={styles.imageContainer}>
         <Image source={imageSource} style={styles.image} resizeMode="cover" />
@@ -32,7 +45,7 @@ export default function LeaderboardItem({
           {isTop && (
             <Crown
               color="#FBBF24"
-              size={20}
+              size={18}
               fill="#FBBF24"
               style={styles.crown}
             />
@@ -55,6 +68,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 24,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.05)",
+  },
+  topContainer: {
+    backgroundColor: "#2E1B3D",
+    borderColor: "rgba(251, 191, 36, 0.35)",
   },
   rankContainer: {
     width: 30,

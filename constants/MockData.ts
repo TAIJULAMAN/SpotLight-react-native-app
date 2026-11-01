@@ -16,7 +16,7 @@ export const CHARACTERS = [
     {
         id: '3',
         name: 'Apna College',
-        image: require('../assets/images/Angryjoe.png'),
+        image: require('../assets/images/apna.jpg'),
         votes: '15.5k',
         video: require('../assets/video/apna.mp4'),
     },
@@ -30,7 +30,7 @@ export const CHARACTERS = [
     {
         id: '5',
         name: 'Bruno Simon',
-        image: require('../assets/images/Jontron.png'),
+        image: require('../assets/images/bruno.jpg'),
         votes: '9.5k',
         video: require('../assets/video/simon.mp4'),
     },

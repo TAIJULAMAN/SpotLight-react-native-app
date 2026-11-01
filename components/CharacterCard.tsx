@@ -54,12 +54,13 @@ const styles = StyleSheet.create({
   container: {
     width: "48%",
     backgroundColor: "rgba(255,255,255,0.05)",
-    borderRadius: 40,
-    padding: Spacing.lg,
+    borderRadius: 32,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     alignItems: "center",
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.05)",
+    borderColor: "rgba(255,255,255,0.06)",
     position: "relative",
   },
   selectedContainer: {
@@ -71,15 +72,16 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.1)",
   },
   imageContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: Spacing.md,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    marginBottom: Spacing.sm,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 50,
+    borderRadius: 45,
   },
   name: {
     color: Colors.text,

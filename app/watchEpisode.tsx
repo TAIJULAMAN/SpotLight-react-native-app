@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -8,26 +8,28 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Home, Clock } from "lucide-react-native";
+import { ChevronLeft, Clock } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import Head from "expo-router/head";
 import { useVideoPlayer, VideoView } from "expo-video";
 
 export const metadata = {
-  title: "Watch Episode",
+  title: "Watch Episode | Dark Grevil",
   description: "Watch the full episode and final showdown on Dark Grevil",
   author: "Khaled Alghanim",
 };
 
 const { width } = Dimensions.get("window");
-const videoSource = require("../assets/video/lastOne.mp4");
+const videoSource = require("../assets/video/shaiq.mp4");
 
 export default function WatchEpisodePage() {
   const router = useRouter();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const player = useVideoPlayer(videoSource, (player) => {
-    player.loop = true;
-    player.play();
+  const player = useVideoPlayer(videoSource, (p) => {
+    p.loop = true;
+    p.play();
+    p.muted = false;
+    p.volume = 1.0;
+    p.audioMixingMode = "doNotMix";
   });
 
   return (
@@ -41,10 +43,11 @@ export default function WatchEpisodePage() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
-            style={styles.homeButton}
-            onPress={() => router.push("/home")}
+            style={styles.backButton}
+            onPress={() => router.replace("/home")}
+            activeOpacity={0.8}
           >
-            <Home color="#FFF" size={20} />
+            <ChevronLeft color="#FFF" size={24} />
           </TouchableOpacity>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>Watch Episode</Text>
@@ -84,22 +87,6 @@ export default function WatchEpisodePage() {
             conclusion. Alliances will be tested, and only one will rise to
             claim the ultimate victory.
           </Text>
-
-          {isExpanded && (
-            <Text style={styles.extraDescription}>
-              ei app ta bangladesh theke banano hoyeche abong eta dr. Khaled
-              Alghanim banaise.
-            </Text>
-          )}
-
-          <TouchableOpacity
-            onPress={() => setIsExpanded(!isExpanded)}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.showMoreText}>
-              {isExpanded ? "Show less" : "Show more"}
-            </Text>
-          </TouchableOpacity>
         </View>
 
         <View style={{ height: 40 }} />
@@ -111,7 +98,7 @@ export default function WatchEpisodePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#000000",
   },
   header: {
     flexDirection: "row",
@@ -119,14 +106,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 16,
   },
-  homeButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#1A1A1A",
+  backButton: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.05)",
   },
   headerTextContainer: {
     flex: 1,
@@ -146,24 +135,25 @@ const styles = StyleSheet.create({
   },
   video: {
     width: "100%",
-    height: width * 0.6,
+    aspectRatio: 16 / 9,
     borderRadius: 24,
     overflow: "hidden",
+    backgroundColor: "#111827",
   },
   contentSection: {
     paddingHorizontal: 24,
-    marginTop: 32,
+    marginTop: 28,
   },
   episodeTitle: {
     color: "#FFF",
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     marginBottom: 16,
   },
   badgeRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 20,
     flexWrap: "wrap",
   },
   seasonBadge: {
@@ -192,20 +182,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   description: {
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "rgba(255, 255, 255, 0.65)",
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 16,
-  },
-  extraDescription: {
-    color: "rgba(255, 255, 255, 0.85)",
-    fontSize: 15,
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  showMoreText: {
-    color: "#A855F7",
-    fontSize: 16,
-    fontWeight: "500",
   },
 });

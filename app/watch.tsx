@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Spacing } from '../constants/Theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Head from 'expo-router/head';
@@ -18,6 +19,7 @@ export const metadata = {
 
 export default function WatchScreen() {
     const router = useRouter();
+    const insets = useSafeAreaInsets();
     const { id } = useLocalSearchParams();
     const character = CHARACTERS.find(c => c.id === id) || CHARACTERS[0];
     const videoSource = character.video || CHARACTERS[0].video;
@@ -130,7 +132,7 @@ export default function WatchScreen() {
             )}
 
             {/* Top Controls Overlay */}
-            <View style={styles.topControls}>
+            <View style={[styles.topControls, { top: Math.max(insets.top + Spacing.sm, 48) }]}>
                 <TouchableOpacity
                     style={styles.roundButton}
                     onPress={() => router.back()}
@@ -153,7 +155,7 @@ export default function WatchScreen() {
             </View>
 
             {/* Bottom Info Overlay */}
-            <View style={styles.bottomOverlay}>
+            <View style={[styles.bottomOverlay, { bottom: Math.max(insets.bottom + Spacing.md, 40) }]}>
                 {/* Progress Bar */}
                 <View style={styles.progressBarTrack}>
                     <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />

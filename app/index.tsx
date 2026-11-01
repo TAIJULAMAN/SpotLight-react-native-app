@@ -70,12 +70,4 @@ const styles = StyleSheet.create({
         width: width * 0.7,
         height: width * 0.7,
     },
-
-    title: {
-        color: '#FFFFFF',
-        fontSize: 42,
-        fontWeight: 'bold',
-        fontFamily: 'System',
-        letterSpacing: -0.5,
-    },
 });
